@@ -1,0 +1,61 @@
+---
+title: '3.'
+output: html_document
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Definice základních pojmů
+
+Statistický znak A: dlzka a sirka
+                 B: odpoveda norme, neodpoveda norme
+                 
+Statistická jednotka: suciastka
+                 
+Základní soubor: vsetky suciastky
+
+Výběrový soubor: 298 suciastok
+
+# Zadání kontingenční tabulky
+
+```{r}
+kt=matrix(c(115,60,22,101),ncol = 2)
+kt
+```
+
+```{r}
+sum(kt)
+```
+
+Test nezávislosti kvalitativních znaků (chí-kvadrát test)
+
+## Formulace hypotéz
+
+$H_0:p_{ij}=p_{i\cdot}p_{\cdot j}$ (znaky jsou nezávislé)
+
+$H_1:p_{ij}\neq p_{i\cdot}p_{\cdot j}$ (znaky jsou závislé)
+
+## Realizace testu
+
+```{r}
+chisq.test(kt)
+```
+
+Volíme $\alpha=0{,}05$ a porovnáme ji s p-hodnotou.
+
+## Závěr testu
+
+P-hodnota je menší než $\alpha$ (0,00000000000000009118 < 0,05), zamítáme $H_0$ a přijmeme $H_1$. Délka a šířka součástek jsou závislé.
+
+# Cramerův koeficient (sílá závislosti)
+
+```{r}
+library(lsr)
+cramersV(kt)
+```
+
+Koeficient je blízký nule, mezi znaky existuje slabá závislost.

@@ -1,0 +1,66 @@
+---
+title: "Příklad 3"
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-03-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Definice základních pojmů
+
+Statistický znak A: vzdělání (ZŠ, SŠ, VŠ),
+
+                 B: typ časopisu (A, B, C).
+                 
+Statistická jednotka: čtenář.
+                 
+Základní soubor: všichni čtenáři.
+
+Výběrový soubor: 400 čtenářů.
+
+# Zadání kontingenční tabulky
+
+```{r}
+kt=matrix(c(75,40,35,75,70,5,50,40,10),ncol = 3)
+kt
+```
+
+```{r}
+sum(kt)
+```
+
+Test nezávislosti kvalitativních znaků (chí-kvadrát test)
+
+## Formulace hypotéz
+
+$H_0:p_{ij}=p_{i\cdot}p_{\cdot j}$ (znaky jsou nezávislé)
+
+$H_1:p_{ij}\neq p_{i\cdot}p_{\cdot j}$ (znaky jsou závislé)
+
+## Realizace testu
+
+```{r}
+chisq.test(kt)
+```
+
+Volíme $\alpha=0{,}05$ a porovnáme ji s p-hodnotou.
+
+## Závěr testu
+
+P-hodnota je menší než $\alpha$ (0,00000126 < 0,05), zamítáme $H_0$ a přijmeme $H_1$. Na základě průzkumu lze říci, že výběr časopisu souvisí se vzděláním.
+
+# Cramerův koeficient (sílá závislosti)
+
+```{r}
+library(lsr)
+cramersV(kt)
+```
+
+Koeficient je blízký nule, mezi znaky existuje slabá závislost.
+
+
+

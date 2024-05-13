@@ -1,0 +1,239 @@
+---
+title: "1. semestrálna úloha"
+output: html_document
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Definicia základných pojmov
+
+Štatistický znak: trvanie opravy zapalovania u auta (min)
+
+Štatistická jednotka: oprava opravárom
+
+Základný súbor: všetky opravy 
+
+Výberový súbor: 10 opráv 
+
+
+
+
+
+# Zadanie hodnôt
+
+```{r}
+x=c(38
+,43
+,41
+,40
+,41
+,43
+,45
+,39
+,38
+,41)
+length(x)
+```
+# Výpočet základných číselných charakteristik
+
+# Výberový priemer
+
+```{r}
+mean(x)
+```
+# Výberový rozptyl
+
+```{r}
+var(x)
+```
+# Výberová smerodatná odchylka
+
+```{r}
+sd(x)
+```
+
+# Medián
+
+```{r}
+median(x)
+```
+
+
+# Kontrola prítomnosti extrémnych hodnôt krabičkovým grafom
+
+```{r out.width="45%"}
+boxplot(x)
+```
+
+Žiadna z nameraných hodnôt neleží mimo intervalu prípustných hodnot. Datový súbor neobsahuje žiadne extrémne hodnoty. Číselné charakteritiky niesu skreslené a môžu byť ďalej použité.
+
+
+#Tabuľka
+
+# Roztriedenie datového súboru
+
+
+```{r}
+min(x)
+max(x)
+```
+
+
+```{r}
+y=hist(x,br=c(38,39,40,41,42,43,44,45),right=FALSE)
+```
+Z tvaru histogramu dá sa usúdiť, že namerané data sú v poriadku (datový soubor neobsahuje extrémne hodnoty, niesu zmiešané viaceré dátové súbory do jednoho, s daty nebylo manipulováno,...).
+
+Z tvaru histogramu môžme tiež usúdiť konkrétný typ rozdělení sledovaného znaku.
+
+Pro lepší představu o typu rozdělení lze přidat křivky hustot pravděpodobnosti konkrétních rozdelení.
+
+```{r}
+hist(x,br=c(38,39,40,41,42,43,44,45,46),freq=FALSE,right=FALSE)
+curve(dnorm(x,40.9,2.282786),col="red",add=TRUE)
+```
+Na základě grafu lze předpokládat, že chování sledovaného znaku lze popsat normálním rozdělením N($\mu$,$\sigma$).
+
+Parametry tohoto rozdělení odhadneme pomocí číselných charakteristik:
+
+$\mu\approx 42{,}27$ (tis. km),
+
+$\sigma\approx 1{,}48$ (tis. km).
+
+# Podrobnejšie výsledky triedenia
+
+Stredy jednotlivých tried.
+
+```{r}
+y$mids
+```
+
+Četnosti.
+
+```{r}
+y$counts
+```
+Relativní četnosti (služí ako odhady pravdepodobností).
+
+```{r}
+y$counts/10
+```
+Pre väčšiu prehladnosť môžme tieto výsledky usporiadať do tabuľky.
+
+```{r}
+library(knitr)
+kable(data.frame(y$mids,y$counts,y$counts/10),col.names = c("$z_j$","$f_j$","$f_j/n$"))
+```
+Interpretácia relativnych četností.
+
+$0{,}26\approx P\left(X\in \langle 42, 43)\right)$.
+
+Asi 26 % oprav porouchaných TV se uskuteční od 42 do 43 minut.
+# Empirická distribuční funkce
+
+```{r}
+f=ecdf(x)
+```
+Všechny různé hodnoty seřazené od nejmenší po největší:
+
+```{r}
+knots(f)
+```
+Odpovedajúce hodnoty empirickej distribučnej funkcie:
+
+```{r}
+f(knots(f))
+```
+Usporiadanie výsledkov do tabulky.
+
+```{r}
+library(knitr)
+kable(data.frame(knots(f),f(knots(f))),col.names = c("$x$","$F_n(x)$"))
+```
+Interpretáce hodnot empirické distribuční funkce.
+
+$F_n(40)=0{,}4\approx P(X\leq 40).$
+
+Asi 40 % aut přistavených ke generální opravě má najeto nejvýše 150000 kilometrů.
+
+
+# Empirická distribuční funkce
+
+```{r out.width="45%"}
+plot(f)
+```
+
+Pomocou tvaru empirickej distribučnej funkcie môžeme usúdiť rozdelenie sledovaného znaku.
+
+Na lepšie znázornenie typu rozdelenia pridáme krivky distribučných funkcií konkrétnych rozdelení.
+
+
+```{r out.width="45%"}
+plot(f)
+curve(pnorm(x,40.9,2.282786),col="red",add=TRUE)
+curve(pexp(x,1/40.9),col="blue",add=TRUE)
+```
+
+Na základe grafu môžeme predpokladať, že chovanie sledovaného znaku môžeme popísať normálnym rozdelením ktoré udáva červená krivka. 
+
+
+# Bodové odhady parametrov $\mu$ a $\sigma$
+
+Parametry normálního rozdělení odhadneme pomocí výberových charakteristik.
+
+$\mu\approx 13{,}93365$ (min)
+
+$\sigma\approx 1{,}322509$ (min).
+
+# Test o parametru $\mu$ normálného rozdelenia pomocou t-testu
+
+Provnávame nami vypočítanú strednú hodnotu 13.93365 s hodnotou 13.00. Teda zistujeme či priemerná hodnota doby trvania cesty tramvajom v danom úseku nami meraná je naozaj väčšia ako udávaná oficialna hodnota.
+
+Pretože sme zistili, že sledovaný znak sa dá opísať normálným rozdelením a poznáme aj odhad jeho parametru $\mu$, použijeme pre overenie predpokladu trvania cesty na danom úseku test o parametri $\mu$ t-test.
+
+# Formulace hypotéz 
+
+$H_0: \mu\geq\mu_0$ (čas trvania jazdy tramvajom na úseku (Česká-Technologický park) nieje dlhší než oficialny čas trvania jazdy v tomto úseku).
+
+$H_1: \mu < \mu_0$ (čas trvania jazdy tramvajom na úseku (Česká-Technologický park) je dlhší než oficialny čas trvania jazdy v tomto úseku).
+
+# Realizácia t-testu
+
+```{r}
+t.test(x,alternative="less",mu=42)
+```
+
+# Voľba hladiny významnosti
+
+Zvolíme hladinu významnosti $\alpha=0{,}05$ a porovnáme ju s p-hodnotou. 
+
+# Záver testu
+
+P-hodnota je menšia než $\alpha$ ($0{,}002594<0{,}05$), zamietame $H_0$ a prijmame $H_1$.
+na základe dat môžeme tvrdiť, že čas trvania jazdy tramvajom na úseku (Česká-Technologický park) je dlhší než oficialny čas trvania jazdy v tomto úseku. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

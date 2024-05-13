@@ -1,0 +1,145 @@
+---
+title: "1."
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-04-25"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Definícia základných pojmov
+
+Štatistický znak: doba ukoncenia urcitej ulohy (min)
+
+Štatistická jednotka: zamestanec
+
+Základný súbor: vsetci zamestnanci
+
+Výberový súbor: 15 zamestnancov
+
+# Zadanie hodnôt
+
+```{r}
+x=c(25, 20, 27, 33, 32, 35, 16, 25, 35, 23, 25, 36, 36, 37, 38)
+length(x)
+```
+
+# Výpočet základných číselných charakteristik
+
+# Výberový priemer
+
+```{r}
+mean(x)
+```
+# Výberový rozptyl
+
+```{r}
+var(x)
+```
+# Výberová smerodatná odchylka
+
+```{r}
+sd(x)
+```
+
+# Medián
+
+```{r}
+median(x)
+```
+
+# Kontrola prítomnosti extrémnych hodnôt krabičkovým grafom
+
+```{r out.width="45%"}
+boxplot(x)
+```
+
+Žiadna z nameraných hodnôt neleží mimo intervalu prípustných hodnot. Datový súbor neobsahuje žiadne extrémne hodnoty. Číselné charakteritiky niesu skreslené a môžu byť ďalej použité.
+
+# Empirická distribučná funkcia
+
+```{r}
+f=ecdf(x)
+```
+Všetky rôzne hodnoty zoradené od najmenší po najvetší:
+
+```{r}
+knots(f)
+```
+Odpovedajúce hodnoty empirickej distribučnej funkcie:
+
+```{r}
+f(knots(f))
+```
+Usporiadanie výsledkov do tabulky.
+
+```{r}
+library(knitr)
+kable(data.frame(knots(f),f(knots(f))),col.names = c("$x$","$F_n(x)$"))
+```
+Interpretáce hodnot empirické distribuční funkce.
+
+$F_n(33)=0{,}6\approx P(X\leq 33).$
+
+ 60 % zamestnancom trvala úloha 33 min
+
+
+# Empirická distribuční funkce
+
+```{r out.width="45%"}
+plot(f)
+```
+
+Pomocou tvaru empirickej distribučnej funkcie môžeme usúdiť rozdelenie sledovaného znaku.
+
+Na lepšie znázornenie typu rozdelenia pridáme krivky distribučných funkcií konkrétnych rozdelení.
+
+
+```{r out.width="45%"}
+plot(f)
+curve(pnorm(x,29.53333,6.937133),col="red",add=TRUE)
+curve(pexp(x,1/29.53333),col="blue",add=TRUE)
+```
+
+Na základe grafu môžeme predpokladať, že chovanie sledovaného znaku môžeme popísať normálnym rozdelením ktoré udáva červená krivka.
+
+# Bodové odhady parametrov $\mu$ a $\sigma$
+
+Parametry normálního rozdělení odhadneme pomocí výberových charakteristik.
+
+$\mu\approx 29{,}53333$ (min)
+
+$\sigma\approx 6{,}937133$ (min).
+
+# Test o parametru $\mu$ normálného rozdelenia pomocou t-testu
+
+Provnávame nami vypočítanú strednú hodnotu 29.53333 s hodnotou 33. Teda zistujeme či priemerná hodnota doby z noveho priskumu namerana je naozaj väčšia ako udávaná oficialna hodnota.
+
+Pretože sme zistili, že sledovaný znak sa dá opísať normálným rozdelením a poznáme aj odhad jeho parametru $\mu$, použijeme pre overenie predpokladu trvania cesty na danom úseku test o parametri $\mu$ t-test.
+
+# Formulace hypotéz 
+
+$H_0: \mu\geq\mu_0$ (čas trvania dokoncenia ulohy po zaskoleni nieje dlhší než oficialny čas dokoncenia ulohy).
+
+$H_1: \mu < \mu_0$ (čas trvania dokoncenia ulohy po zaskoleni je dlhší než oficialny čas dokoncenia ulohy).
+
+# Realizácia t-testu
+
+```{r}
+t.test(x,alternative="less",mu=33)
+```
+
+# Voľba hladiny významnosti
+
+Zvolíme hladinu významnosti $\alpha=0{,}05$ a porovnáme ju s p-hodnotou. 
+
+# Záver testu
+
+P-hodnota je menšia než $\alpha$ ($0{,}0367<0{,}05$), zamietame $H_1$ a prijmame $H_0$. Priemerna doba ukoncenia ulohy sa po zaskoleni znizila.
+
+
+
+

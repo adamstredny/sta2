@@ -1,0 +1,151 @@
+---
+title: "2."
+output: html_document
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Definice základních pojmů
+
+Statistický znak X: pocet novo zaregistrovanych zakaznikov 
+
+Statistická jednotka: kampan 1, kampan 2
+
+Základní soubor: cela doba kampane 1, cela doba kampane 2
+
+Výběrový soubor: 6 polrokov kampani 1, 6 polrokov kampani 2
+
+# Zadání hodnot
+
+```{r}
+a=c(224, 222, 228, 232, 226, 230)
+b=c(232, 228, 226, 236, 234, 230)
+length(a)
+length(b)
+```
+
+# Výpočet číselných charakteritik
+
+## Kampan 1
+
+```{r}
+mean(a)
+sd(a)
+```
+
+## Kampan 2
+
+```{r}
+mean(b)
+sd(b)
+```
+
+S ohledem na to, že pracujeme s dvěma výběry, použijeme pro porovnání pevností dvouvýběrový statistický test. Nejčastěji používaným je dvouvýběrový t-test. Pro jeho použití musí být splněna podmínka normality a podmínka nezávislosti výběrů.
+
+# Ověření podmínky normality (Shapirův-Wilkův test)
+
+## Formulace hypotéz
+
+$H_0$: sledovaný znak X má normání rozdělení,
+
+$H_1$: sledovaný znak X nemá normání rozdělení.
+
+## Realizace testu
+
+### Kampan 1
+
+```{r}
+shapiro.test(a)
+```
+
+W je menší než číslo 1, existuje odchylka od normálního rozdělení. Významnost této odchylky posoudíme porovnáním p-hodnoty s hladinou významnosti.
+
+Volíme $\alpha=0{,}05$. P-hodnota je větší než $\alpha$ (0.9606 > 0,05), ponecháme $H_0$. Kampan 1 se řídí normálním rozdělením.
+
+### Kampan 2 
+
+```{r}
+shapiro.test(b)
+```
+
+W je menší než číslo 1, existuje odchylka od normálního rozdělení. Významnost této odchylky posoudíme porovnáním p-hodnoty s hladinou významnosti.
+
+Volíme $\alpha=0{,}05$. P-hodnota je větší než $\alpha$ (0.9606 > 0,05), ponecháme $H_0$. Kampan 2 se řídí normálním rozdělením.
+
+## Závěr testu
+
+Podmínka normality je splněna.
+
+# Ověření podmínky nezávislosti výběrů
+
+```{r}
+plot(a,b)
+```
+
+Na základě rozložení bodů lze předpokládat, že výběry jsou nezávislé. 
+
+# Porovnání rozptylů (F-test)
+
+## Formulace hypotéz
+
+$H_0:\sigma_A^2 = \sigma_B^2$ (rozptyly jsou stejné)
+
+$H_1:\sigma_A^2 \neq \sigma_B^2$ (rozptyly nejsou stejné)
+
+## Realizace testu
+
+```{r}
+var.test(a,b,alternative="two.sided")
+```
+
+Volíme $\alpha=0{,}05$ a porovnáme ji s p-hodnotou.
+
+## Závěr testu
+
+P-hodnotu je větší než $\alpha$ (1 > 0,05), ponecháme $H_0$. Rozptyly můžeme považovat za stejné. 
+
+# Porovnání pevností (t-test)
+
+Budeme chtít zjistit, zda lze prohlásit, že kampan 1 prilakala viac zakaznikov ako kampan 2.
+
+## Formulace hypotéz
+
+$H_0:\mu_A \geq \mu_B$ (kampan 2 neprilákala viac zákaznikov ako kampan 1),
+
+$H_1:\mu_A > \mu_B$ (kampan 2 prilákala viac zákaznikov ako kampan 1).
+
+## Realizace testu
+
+```{r}
+t.test(a,b,alternative="less",var.equal=TRUE)
+```
+
+Volíme $\alpha=0{,}05$ a porovnáme ji s p-hodnotou.
+
+## Závěr testu
+
+P-hodnotu je větší než $\alpha$ (0.0469 < 0,05), zamietame $H_0$. A prijmeme $H_1$. To znamena ze kampan 2 prilakala viac zakaznikov ako kampan 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

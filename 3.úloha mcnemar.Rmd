@@ -1,0 +1,55 @@
+---
+title: "Příklad 4"
+author: ''
+date: "2024-04-04"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Definice základních pojmů
+
+Statistický znak: názor na vstup ČR do EU (pro, proti).
+
+Statistická jednotka: občan.
+
+Základní soubor: všichni občané ČR.
+
+Výběrový soubor: 128 občanů.
+
+# Zadání čtyřpolní tabulky
+
+```{r}
+ct=matrix(c(48,14,26,40),ncol=2)
+ct
+```
+
+Protože v tomto příkladu sledujeme na stejném výběru jeden kvalitativní znak (názor občanů na vstup ČR do EU) dvakrát (před vstupem a po ročním působení v EU), nepoužijeme přímo chí-kvadrát test, ale použijeme jeho modifikaci McNemarův test.
+
+# McNemarův test
+
+## Formulace hypotéz
+
+$H_0:p_{12}=p_{21}$ (názor občanů se nezměnil),
+
+$H_1:p_{12}\neq p_{21}$ (názor občanů se změnil).
+
+## Realizace testu
+
+```{r}
+mcnemar.test(ct,correct=FALSE)
+```
+
+Volíme $\alpha=0{,}05$ a porovnáme ji s p-hodnotou.
+
+## Závěr testu
+
+P-hodnota je větší než $\alpha$ (0,058 > 0,05), ponecháme $H_0$. Názor občanů na vstup ČR do EU se nezměnil.
+
+
+
+

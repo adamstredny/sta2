@@ -1,0 +1,76 @@
+---
+title: "Pr. 3"
+author: ""
+date: "2024-05-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Definice základních pojmů
+
+Statistický znak A: vek(18-25;25-35;36-45) 
+                 B: výkon(slabý;stredný;silný)  
+
+Statistická jednotka: zamestnanec  
+
+Základní súbor: všetci zamestnanci 
+
+Výberový súbor: 315 
+
+# Zadání kontingenční tabulky 
+
+  
+
+```{r} 
+
+kt=matrix(c(30,20,40,20,40,30,40,40,55),ncol=3) 
+
+kt 
+
+sum(kt) 
+
+``` 
+
+  
+
+# Formulace hypotézy 
+
+  
+
+$H_0: p_{ij} = p_ip_j$ (znaky sú nezávislé)  
+
+$H_1: p_{ij} \neq p_ip_j$ (znaky sú závislé) 
+
+  
+
+# Realizace testu 
+
+```{r} 
+
+chisq.test(kt) 
+
+``` 
+
+P-hodnota v porovnání s $\alpha = 0.05$ (0.02846 < 0.05) Tedy zamítáme $H_0$ a potvrdzujeme $H_1$. 
+
+Môžeme teda povedať, že výkony zamestnancov závisia na veku. 
+
+  
+
+## Cramerův koeficient 
+
+```{r} 
+
+library(lsr)  
+
+cramersV(kt)  
+
+``` 
+
+Pomocou cramerova koeficinetu môžeme povedať, že závislost je blízko nule a teda je to veľmi slabá kladná závislosť. 
+
+
+
